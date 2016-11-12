@@ -1,0 +1,32 @@
+[DEFAULT]
+pki_instance_name = {{ pkiname }}
+
+[CA]
+pki_http_port = 8080
+pki_https_port = 8443
+pki_ajp_port = 8009
+pki_tomcat_server_port = 8005
+pki_admin_uid = caadmin
+pki_admin_password = {{ password }}
+pki_backup_password = {{ password }}
+pki_client_database_password = {{ password }}
+pki_client_pkcs12_password = {{ password }}
+pki_import_admin_cert = False
+pki_client_admin_cert = /root/.dogtag/{{ pkiname }}/ca_admin.cert
+pki_ds_hostname = {{ ansible_hostname }}
+pki_ds_ldap_port = 389
+pki_ds_bind_dn = cn=Directory Manager
+pki_ds_password = {{ password }}
+pki_ds_base_dn = {{ LDAP_Suffix }}
+pki_security_domain_name = {{ ansible_hostname }} Security Domain
+pki_client_pin = {{ password }}
+pki_clone_pkcs12_password = {{ password }}
+pki_external_pkcs12_password = {{ password }}
+pki_pkcs12_password = {{ password }}
+pki_one_time_pin = {{ password }}
+pki_pin = {{ password }}
+pki_replication_password = {{ password }}
+pki_security_domain_password = {{ password }}
+pki_server_pkcs12_password = {{ password }}
+pki_token_password = XXXXXXXX
+

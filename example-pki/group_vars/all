@@ -1,0 +1,9 @@
+# Master Password
+
+password: pleaseChangeMe#3
+
+# LDAP Configuration
+LDAP_Suffix: dc=example,dc=com
+
+# PKI Instance Info
+pkiname: pki-tom

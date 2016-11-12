@@ -1,0 +1,47 @@
+---
+
+- name: Add EPEL
+  yum: state=present name=epel-release
+
+- name: Install LDAP 389 server
+  yum: state=present name=389-ds-base
+
+- name: Download the Repo for 10.3.3 Dogtag
+  get_url:
+    dest: /etc/yum.repos.d/copr-pki-dogtag.repo
+    url: https://copr.fedorainfracloud.org/coprs/g/pki/10.3.3/repo/epel-7/group_pki-10.3.3-epel-7.repo
+
+- name: Install dogtag base software
+  yum: state=present name=dogtag-pki
+
+- name: Create user pkisrv
+  user: name=pkisrv  
+
+- name: Check if there's a dogtag instance already of 389
+  stat: path=/etc/dirsrv/slapd-dogtag
+  register: slapd_dogtag_dir
+
+- name: DS instance configuration
+  command: > 
+   setup-ds.pl --silent General.FullMachine=`hostname` 
+   General.SuiteSpotUserID=pkisrv 
+   General.SuiteSpotGroup=pkisrv 
+   slapd.ServerPort=389 
+   slapd.ServerIdentification={{ pkiname }}
+   slapd.Suffix={{ LDAP_Suffix }} 
+   slapd.RootDN="cn=Directory Manager" 
+   slapd.RootDNPwd={{ password }}
+  when: slapd_dogtag_dir.stat.exists == False
+
+- name: Setup the configuration file
+  template:
+    src: deployment.cfg.j2
+    dest: /root/deployment.cfg
+
+#- name: Check if a CA already exists
+#  stat: path=/var/lib/pki/{{ pkiname }}
+#  register: pki_instance
+
+- name: Create a new CA
+  command: pkispawn -s CA -f /root/deployment.cfg
+#  when: pki_instance.stat.exists == False

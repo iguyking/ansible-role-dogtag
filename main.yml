@@ -1,0 +1,6 @@
+---
+
+- hosts: dogtag
+  remote_user: root
+  roles: 
+  - dogtag-pki
